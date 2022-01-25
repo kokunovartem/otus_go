@@ -28,11 +28,11 @@ func Unpack(packedString string) (string, error) {
 		return "", ErrInvalidString
 	}
 
-	var unpackedData []Character
+	unpackedData := make([]Character, len(packedString))
 
 	for i, character := range packedData {
 		if character.isShielded {
-			unpackedData = append(unpackedData, character)
+			unpackedData[i] = character
 			continue
 		}
 
@@ -43,27 +43,27 @@ func Unpack(packedString string) (string, error) {
 
 			unpackedData[i-1].char = strings.Repeat(packedData[i-1].char, character.value)
 		}
-		unpackedData = append(unpackedData, character)
+		unpackedData[i] = character
 	}
 
 	return toString(unpackedData), nil
 }
 
 func toStruct(packedSlice []string) []Character {
-	var packedData []Character
-	for _, char := range packedSlice {
+	packedData := make([]Character, len(packedSlice))
+	for i, char := range packedSlice {
 		var isNumber bool
 		value, err := strconv.Atoi(char)
 		if err == nil {
 			isNumber = true
 		}
-		packedData = append(packedData, Character{
+		packedData[i] = Character{
 			char,
 			isNumber,
 			value,
 			false,
 			false,
-		})
+		}
 	}
 
 	return packedData
@@ -87,7 +87,7 @@ func toString(unpackedData []Character) string {
 			continue
 		}
 
-		result = result + character.char
+		result += character.char
 	}
 
 	return result
