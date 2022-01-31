@@ -55,12 +55,11 @@ func Unpack(input string) (string, error) {
 			continue
 		}
 
-		if isDigit(runeSymbol) || isAsterisk(runeSymbol) {
-			continue
-		}
-
 		prevRuneSymbol = runeSymbol
-		output.WriteRune(runeSymbol.value)
+
+		if !isDigit(runeSymbol) && !isAsterisk(runeSymbol) {
+			output.WriteRune(runeSymbol.value)
+		}
 	}
 
 	return output.String(), nil
